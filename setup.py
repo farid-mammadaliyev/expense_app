@@ -2,8 +2,13 @@
 
 from PIL import Image,ImageTk
 
+import calendar
+import datetime 
+from datetime import datetime
 
 import tkinter as tk
+
+
 window=tk.Tk()
 window.title(" Calculate the total cost of living")
 window.geometry("750x750")
@@ -24,8 +29,8 @@ elect_2.grid(column=2,row=4)
 water = tk.Label(text = "Water meter")
 water.grid(column=2,row=5)
 
-number_months = tk.Label(text = "    Number of months")
-number_months.grid(column=2,row=6)
+number_days = tk.Label(text = "    Number of days")
+number_days.grid(column=2,row=6)
 
 
 gasEntry = tk.Entry()
@@ -37,8 +42,8 @@ elect_2Entry.grid(column=3,row=4)
 waterEntry = tk.Entry()
 waterEntry.grid(column=3,row=5)
 
-number_monthsEntry = tk.Entry()
-number_monthsEntry.grid(column=3,row=6)
+number_daysEntry = tk.Entry()
+number_daysEntry.grid(column=3,row=6)
 
 import pandas as pd
 
@@ -59,7 +64,7 @@ def getInput():
 
 
     monkey = Person(gas = int(gasEntry.get()), elect_1 = int(elect_1Entry.get()), elect_2 = int(elect_2Entry.get()),\
-     water = int(waterEntry.get()), number_months = float(number_monthsEntry.get()))
+     water = int(waterEntry.get()), number_days = int(number_daysEntry.get()))
     
     
     textArea = tk.Text(master=window,height=10,width=65)
@@ -84,19 +89,27 @@ maintaince_boiler = 5.52
 
 
 
+currentYear = int(datetime.today().replace(day=1).strftime('%-Y'))
+currentMonth = int(datetime.today().replace(day=1).strftime('%-m'))
+passedMonth = currentMonth - 1
+
+_, num_days = calendar.monthrange(currentYear, currentMonth)
+
 
 
 class Person:
-    def __init__(self, gas, elect_1, elect_2, water, number_months ):
+    def __init__(self, gas, elect_1, elect_2, water, number_days ):
         self.gas = gas
         self.elect_1 = elect_1
         self.elect_2 = elect_2
         self.water = water
-        self.number_months  = number_months 
+        self.number_days  = number_days
 
     def cost_total(self):
 
-        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * self.number_months 
+        number_months = passedMonth + (self.number_days / num_days)
+
+        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * number_months 
 
         total_cost_old = (((df[df['month'] == '01_may_2022'].gas[1] - df[df['month'] == '31_december_2021'].gas[0]) * df.gas_pr) + (((df[df['month'] == '01_may_2022'].electric_1[1] +  
         df[df['month'] == '01_may_2022'].electric_2[1]) - (df[df['month'] == '31_december_2021'].electric_1[0] +  df[df['month'] == '31_december_2021'].electric_2[0])) * df.elect_pr) + 
@@ -115,7 +128,9 @@ class Person:
 
     def per_month(self):
 
-        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * self.number_months 
+        number_months = passedMonth + (self.number_days / num_days)
+
+        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * number_months 
 
         total_cost_old = (((df[df['month'] == '01_may_2022'].gas[1] - df[df['month'] == '31_december_2021'].gas[0]) * df.gas_pr) + (((df[df['month'] == '01_may_2022'].electric_1[1] +  
         df[df['month'] == '01_may_2022'].electric_2[1]) - (df[df['month'] == '31_december_2021'].electric_1[0] +  df[df['month'] == '31_december_2021'].electric_2[0])) * df.elect_pr) + 
@@ -128,7 +143,7 @@ class Person:
 
         cost_total = other_costs + cost
 
-        per_month = round((cost_total/self.number_months), 2)
+        per_month = round((cost_total/number_months), 2)
         
         return per_month
 
@@ -136,7 +151,9 @@ class Person:
 
     def per_person(self):
 
-        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * self.number_months 
+        number_months = passedMonth + (self.number_days / num_days)
+
+        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * number_months 
 
         total_cost_old = (((df[df['month'] == '01_may_2022'].gas[1] - df[df['month'] == '31_december_2021'].gas[0]) * df.gas_pr) + (((df[df['month'] == '01_may_2022'].electric_1[1] +  
         df[df['month'] == '01_may_2022'].electric_2[1]) - (df[df['month'] == '31_december_2021'].electric_1[0] +  df[df['month'] == '31_december_2021'].electric_2[0])) * df.elect_pr) + 
@@ -156,7 +173,9 @@ class Person:
 
     def per_person_month(self):
 
-        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * self.number_months 
+        number_months = passedMonth + (self.number_days / num_days)
+
+        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * number_months 
 
         total_cost_old = (((df[df['month'] == '01_may_2022'].gas[1] - df[df['month'] == '31_december_2021'].gas[0]) * df.gas_pr) + (((df[df['month'] == '01_may_2022'].electric_1[1] +  
         df[df['month'] == '01_may_2022'].electric_2[1]) - (df[df['month'] == '31_december_2021'].electric_1[0] +  df[df['month'] == '31_december_2021'].electric_2[0])) * df.elect_pr) + 
@@ -169,14 +188,16 @@ class Person:
 
         cost_total = other_costs + cost
 
-        per_person_month= round((cost_total/5/self.number_months), 2)
+        per_person_month= round((cost_total/5/number_months), 2)
         
         return per_person_month
 
 
     def to_be_paid(self):
 
-        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * self.number_months 
+        number_months = passedMonth + (self.number_days / num_days)
+
+        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * number_months 
 
         total_cost_old = (((df[df['month'] == '01_may_2022'].gas[1] - df[df['month'] == '31_december_2021'].gas[0]) * df.gas_pr) + (((df[df['month'] == '01_may_2022'].electric_1[1] +  
         df[df['month'] == '01_may_2022'].electric_2[1]) - (df[df['month'] == '31_december_2021'].electric_1[0] +  df[df['month'] == '31_december_2021'].electric_2[0])) * df.elect_pr) + 
@@ -189,13 +210,15 @@ class Person:
 
         cost_total = other_costs + cost
 
-        to_be_paid = round((cost_total/5/self.number_months) - 110, 2)
+        to_be_paid = round((cost_total/5/number_months) - 110, 2)
         
         return to_be_paid
 
     def to_be_paid_total(self):
 
-        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * self.number_months 
+        number_months = passedMonth + (self.number_days / num_days)
+
+        other_costs = (internet + cleaning_lady + insurance + material_usage + maintaince_boiler) * number_months 
 
         total_cost_old = (((df[df['month'] == '01_may_2022'].gas[1] - df[df['month'] == '31_december_2021'].gas[0]) * df.gas_pr) + (((df[df['month'] == '01_may_2022'].electric_1[1] +  
         df[df['month'] == '01_may_2022'].electric_2[1]) - (df[df['month'] == '31_december_2021'].electric_1[0] +  df[df['month'] == '31_december_2021'].electric_2[0])) * df.elect_pr) + 
@@ -208,7 +231,7 @@ class Person:
 
         cost_total = other_costs + cost
 
-        to_be_paid_total = round(((cost_total/5/self.number_months) - 110) * self.number_months, 2)
+        to_be_paid_total = round(((cost_total/5/number_months) - 110) * number_months, 2)
         
         return to_be_paid_total 
 
