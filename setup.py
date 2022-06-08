@@ -15,21 +15,21 @@ window.geometry("750x750")
 
 
 
-newlabel = tk.Label(text = "Enter the current numbers on the meters")
+newlabel = tk.Label(text = "Enter the current numbers on the meters", font=('Calibri', 16, 'bold'))
 newlabel.grid(column=3,row=1)
 
-gas = tk.Label(text = "Gas meter")
+gas = tk.Label(text = "Gas meter", font=('Calibri', 14))
 gas.grid(column=2,row=2)
 
 
-elect_1 = tk.Label(text = "    Electricity meter 1")
+elect_1 = tk.Label(text = "    Electricity meter 1", font=('Calibri', 14))
 elect_1.grid(column=2,row=3)
-elect_2 = tk.Label(text =  "    Electricity meter 2")
+elect_2 = tk.Label(text =  "    Electricity meter 2", font=('Calibri', 14))
 elect_2.grid(column=2,row=4)
-water = tk.Label(text = "Water meter")
+water = tk.Label(text = "Water meter", font=('Calibri', 14))
 water.grid(column=2,row=5)
 
-number_days = tk.Label(text = "    Number of days")
+number_days = tk.Label(text = "    Number of days", font=('Calibri', 14))
 number_days.grid(column=2,row=6)
 
 
@@ -68,7 +68,7 @@ def getInput():
      water = int(waterEntry.get()), number_days = int(number_daysEntry.get()))
     
     
-    textArea = tk.Text(master=window,height=10,width=65)
+    textArea = tk.Text(master=window,height=10,width=65, font=('Calibri', 12))
     textArea.grid(column=3,row=8)
 
     answer = "The total cost is {cost_total} euro\nThe cost per month is {per_month} euro\nThe total cost per person is {per_person} euro\nThe cost per person per month is {per_person_month} euro\nThe total amount to be paid per person per month is {to_be_paid} euro\nThe total amount to be paid per person in total is {to_be_paid_total} euro".\
@@ -79,7 +79,7 @@ def getInput():
     
    
 
-button=tk.Button(window,text="Calculate the cost",command=getInput,bg="pink")
+button=tk.Button(window,text="Calculate the cost",command=getInput,bg="pink", font=('Calibri', 14, 'bold'))
 button.grid(column=3,row=7)
 
 internet = 54.56
@@ -240,7 +240,7 @@ class Person:
 
 
 image=Image.open('app_photo.jpg')
-image.thumbnail((600,300),Image.ANTIALIAS)
+image.thumbnail((800,300),Image.ANTIALIAS)
 photo=ImageTk.PhotoImage(image)
 label_image=tk.Label(image=photo)
 label_image.grid(column=3,row=0)
