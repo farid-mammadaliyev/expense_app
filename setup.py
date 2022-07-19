@@ -79,7 +79,7 @@ def getInput():
     
    
 
-button=tk.Button(window,text="Calculate the cost",command=getInput,bg="pink", font=('Calibri', 14, 'bold'))
+button=tk.Button(window,text="Calculate the cost",command=getInput,bg="pink", font=('Calibri', 16, 'bold'))
 button.grid(column=3,row=7)
 
 internet = 54.56
